@@ -1,0 +1,13 @@
+# IDEs config
+.vscode
+.idea
+
+# Python virtual envs
+venv
+.venv
+env
+.env
+py-venv
+.py-venv
+py-env
+.py-env
