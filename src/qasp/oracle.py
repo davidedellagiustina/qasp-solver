@@ -5,6 +5,7 @@ from typing import Callable
 from qiskit.circuit import QuantumCircuit, QuantumRegister
 from qiskit.circuit.library import PhaseOracle
 
+
 # +-------+
 # | Types |
 # +-------+
@@ -15,10 +16,10 @@ ClassicalOracle = Callable[[Model], bool]
 QuantumOracle = QuantumCircuit
 Oracle = tuple[ClassicalOracle, QuantumOracle]
 
+
 # +-----------------+
 # | Formulas syntax |
 # +-----------------+
-
 
 def __literal_to_formula(literal: Literal) -> str:
     '''Build a logical formula whose only model is the given literal.
@@ -45,10 +46,10 @@ def __model_to_formula(model: Model) -> str:
     pieces = map(__literal_to_formula, model)
     return '(' + ' & '.join(pieces) + ')'
 
+
 # +---------------------+
 # | Oracle construction |
 # +---------------------+
-
 
 def from_asp_stable_models(stable_models: list[Model], var_order: list[str] = None) -> Oracle:
     '''Build an oracle solving an ASP program.

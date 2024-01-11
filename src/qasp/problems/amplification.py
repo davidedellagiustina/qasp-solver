@@ -4,15 +4,15 @@
 import copy
 import math
 import random
-from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister, transpile
+from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
 from qiskit.circuit.library import GroverOperator
-from qiskit_aer import Aer, AerJob
 from ..oracle import Model, QuantumOracle, Oracle
+from ..simul import __exec_circuit
+
 
 # +-----------------------+
 # | Amplification circuit |
 # +-----------------------+
-
 
 def __optimal_num_iters(n: int, m: int) -> int:
     '''Return the optimal number of iterations for amplitude amplification.
@@ -119,26 +119,10 @@ def circuit(
 
     return circ
 
+
 # +----------------------+
 # | Algorithm simulation |
 # +----------------------+
-
-
-def __exec_circuit(circ: QuantumCircuit, shots: int = 1) -> AerJob:
-    '''Execute a quantum circuit and retrieve the execution result.
-
-    #### Arguments
-        circ (QuantumCircuit): Circuit to simulate.
-        shots (int): Number of experiment repetitions to simulate. Defaults to 1.
-
-    #### Return
-        AerJob: Result of the simulation.
-    '''
-    simulator = Aer.get_backend('aer_simulator')
-    circ = transpile(circ, simulator)
-    result = simulator.run(circ, shots=shots).result()
-    return result
-
 
 def __measure_to_model(measurements: str, var_names: str) -> Model:
     '''Convert the result of a measurement to a human-readable format with variable names.
@@ -257,43 +241,3 @@ def exec_find_one_unknown_m(
             break
 
     return (circs, iters, model)
-
-# +---------------------------------+
-# | Known initialization algorithms |
-# +---------------------------------+
-
-
-def alg_grover(n: int) -> QuantumCircuit:
-    '''Return an instance of the Grover initialization algorithm.
-
-    #### Arguments
-        n (int): Number of search qubits.
-
-    #### Return
-        QuantumCircuit: Built circuit.
-    '''
-    circ = QuantumCircuit(n)
-    circ.name = 'WH'
-    circ.h(circ.qubits)
-    return circ
-
-
-def alg_from_weights(weights: list[float]) -> QuantumCircuit:
-    '''Return an instance of the Rot initialization algorithm defined by Riguzzi.
-
-    #### Arguments
-        weights(list[float]): Weight of each bit evaluating to 1. Complementary is computed \
-            assuming normalization constraint.
-
-    #### Return
-        QuantumCircuit: Built circuit.
-    '''
-    n = len(weights)
-    circ = QuantumCircuit(n)
-    circ.name = 'Rot'
-
-    for (i, weight) in zip(range(n), weights):
-        theta = 2 * math.acos(math.sqrt(1 - weight))
-        circ.ry(theta, i)
-
-    return circ

@@ -31,7 +31,7 @@ if __name__ == '__main__':
     pause()
 
     # Initialization algorithm
-    algorithm = qasp.problems.amplification.alg_grover(N)  # Walsh-Hadamard
+    algorithm = qasp.init_algorithm.alg_grover(N)  # Walsh-Hadamard
     print(f'Initialization algorithm:\n{tab(str(algorithm.draw()))}\n')
     pause()
 
