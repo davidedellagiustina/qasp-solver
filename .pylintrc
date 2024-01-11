@@ -3,3 +3,6 @@ max-locals=20
 
 [miscellaneous]
 notes=
+
+[messages control]
+disable=duplicate-code
