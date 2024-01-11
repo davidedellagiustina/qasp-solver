@@ -1,6 +1,6 @@
 name: CI
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   check:
@@ -16,6 +16,7 @@ jobs:
           architecture: 'x64'
       - name: Install dependencies
         run: |
+          apt install -y wget gcc g++ cmake ninja-build
           python -m pip install --upgrade pip
           pip install -r ./requirements.txt
           WORKDIR=`pwd`
@@ -36,3 +37,6 @@ jobs:
           python ./setup.py build
           pip install .
           cd ${WORKDIR} && unset WORKDIR
+      - name: Run pylint
+        run: |
+          pylint ./src/qasp
