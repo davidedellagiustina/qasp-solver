@@ -39,3 +39,5 @@ jobs:
           cd ${WORKDIR} && unset WORKDIR
       - name: Run pylint
         run: PYTHONPATH=. pylint ./src
+      - name: Run autopep8
+        run: autopep8 -rd --exit-code ./src
