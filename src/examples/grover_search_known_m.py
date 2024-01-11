@@ -42,7 +42,7 @@ def tab(lines: str, striplines: bool = False) -> str:
 
 
 if __name__ == '__main__':
-    print(f'ASP program:\n{tab(PRGM.strip(), striplines = True)}\n')
+    print(f'ASP program:\n{tab(PRGM.strip(), striplines=True)}\n')
     pause()
 
     # Program parameters
