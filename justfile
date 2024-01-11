@@ -11,8 +11,7 @@ ci:
 
 # List the available examples
 list:
-    @ls -lA ./src/examples/ | tail -n +2 | awk '{print $9}' | sed 's/.py//' | tr '\n' ' '
-    @echo
+    @ls -lA ./src/examples/ | tail -n +2 | awk '{print $9}' | sed 's/.py//'
 
 # Run a selected example from the examples folder
 run example:

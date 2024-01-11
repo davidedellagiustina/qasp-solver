@@ -160,7 +160,11 @@ def __measure_to_model(measurements: str, var_names: str) -> Model:
     return model
 
 
-def exec_find_one_known_m(algorithm: QuantumCircuit, oracle: Oracle, m: int) -> tuple[int, Model]:
+def exec_find_one_known_m(
+    algorithm: QuantumCircuit,
+    oracle: Oracle,
+    m: int
+) -> tuple[QuantumCircuit, int, Model]:
     '''Simulate the amplitude amplification circuit to find one solution to the problem.
 
     #### Arguments
@@ -169,7 +173,8 @@ def exec_find_one_known_m(algorithm: QuantumCircuit, oracle: Oracle, m: int) -> 
         m (int): (Known) number of solutions.
 
     #### Return
-        tuple[int, Model]: Found solution and number of iterations performed.
+        tuple[QuantumCircuit, int, Model]: Used circuit, number of iterations performed, and found \
+            solution.
     '''
     (c_oracle, q_oracle) = oracle
 
@@ -181,7 +186,6 @@ def exec_find_one_known_m(algorithm: QuantumCircuit, oracle: Oracle, m: int) -> 
 
     # Build circuit
     circ = circuit_optimal(algorithm, q_oracle, m)
-    print(f'Circuit:\n{circ.draw()}\n')
 
     # Run simulation
     model, iters = None, 0
@@ -194,7 +198,7 @@ def exec_find_one_known_m(algorithm: QuantumCircuit, oracle: Oracle, m: int) -> 
             break
 
     # Map output to readable format
-    return (iters, model)
+    return (circ, iters, model)
 
 
 def exec_find_one_unknown_m(
