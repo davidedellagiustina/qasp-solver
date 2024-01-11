@@ -1,6 +1,19 @@
-# QASP solver
-
-<!-- TODO -->
+<br/>
+<p align="center">
+	<a href="https://github.com/davidedellagiustina/qasp-solver">
+		<img src="img/logo.png" alt="Logo" height=80">
+	</a>
+	<h3 align="center">QASP Solver</h3>
+	<p align="center">
+		<img src="https://img.shields.io/static/v1?label=&message=ASP&color=yellow" alt="ASP">
+		<img src="https://img.shields.io/static/v1?label=&message=python&color=blue" alt="python">
+		<img src="https://img.shields.io/static/v1?label=&message=qiskit&color=purple" alt="qiskit">
+		<img src="https://img.shields.io/static/v1?label=license&message=MIT&color=green" alt="MIT license">
+		<br/>
+        Quantum algorithms for solving ASP programs.
+		<br/>
+	</p>
+</p>
 
 ## Table of contents
 
