@@ -1,4 +1,5 @@
-'''Find the models of an ASP program using the naive Grover search algorithm.
+'''Find the models of an ASP program using the Grover search algorithm, but without knowing the \
+    number M of solutions.
 '''
 
 from src import qasp
@@ -25,9 +26,7 @@ if __name__ == '__main__':
 
     # Program parameters
     N = len(STABLE_MODELS[0])
-    M = len(STABLE_MODELS)
     print(f'Number of variables: {N}.')
-    print(f'Number of stable models: {M}.')
     print()
     pause()
 
@@ -42,9 +41,11 @@ if __name__ == '__main__':
     pause()
 
     # Simulation
-    (circuit, iters, stable_model) = qasp.problems.amplification.exec_find_one_known_m(
-        algorithm, oracle, M)
-    print(f'Used circuit:\n{tab(str(circuit.draw()))}\n')
+    (circuits, iters, stable_model) = qasp.problems.amplification.exec_find_one_unknown_m(
+        algorithm, oracle)
+    print('All used circuits:')
+    for circuit in circuits:
+        print(f'{tab(str(circuit.draw()))}\n')
     pause()
     print(f'Found stable model: {stable_model}.')
     print(f'Number of iterations: {iters}.')

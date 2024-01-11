@@ -205,7 +205,7 @@ def exec_find_one_unknown_m(
     algorithm: QuantumCircuit,
     oracle: Oracle,
     c: float = 1.5
-) -> tuple[int, Model]:
+) -> tuple[list[QuantumCircuit], int, Model]:
     '''Exponentially guess the value of m to find one solution to the problem.
 
     #### Arguments
@@ -214,7 +214,8 @@ def exec_find_one_unknown_m(
         c (float): Base of the exponential defining the guess for m.
 
     #### Return
-        tuple[int, Model]: Found solution and number of iterations performed.
+        tuple[list[QuantumCircuit], int, Model]: List of used circuits, number of iterations \
+            performed, and found solution.
     '''
     (c_oracle, q_oracle) = oracle
     inc = True  # Since we do not know m, we must be the most general possible
@@ -229,7 +230,7 @@ def exec_find_one_unknown_m(
     # Prepare circuit with no amplification iterations
     circ_noiter = circuit(copy.deepcopy(algorithm),
                           copy.deepcopy(q_oracle), 0, inc)
-    print(f'Circuit without amplification iterations:\n{circ_noiter.draw()}\n')
+    circs = [circ_noiter]
 
     # Run simulation
     model, iters = None, 0
@@ -248,14 +249,14 @@ def exec_find_one_unknown_m(
         j = random.randint(1, m)
         circ = circuit(copy.deepcopy(algorithm),
                        copy.deepcopy(q_oracle), j, inc)
-        print(f'Circuit with {j} amplification iterations:\n{circ.draw()}\n')
+        circs.append(circ)
         result = __exec_circuit(circ, shots=1)
         measurements = list(result.get_counts(circ).keys())[0]
         model = __measure_to_model(measurements, var_names)
         if c_oracle(model):
             break
 
-    return (iters, model)
+    return (circs, iters, model)
 
 # +---------------------------------+
 # | Known initialization algorithms |
