@@ -2,7 +2,7 @@
 '''
 
 from src import qasp
-from src.examples.util import tab, pause
+from .util import tab, pause
 
 # ASP program
 PRGM = '''
