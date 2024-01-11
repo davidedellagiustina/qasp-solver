@@ -19,24 +19,23 @@ jobs:
           sudo apt install -y wget gcc g++ cmake ninja-build
           python -m pip install --upgrade pip
           pip install -r ./requirements.txt
-          pip install tweedledum
-          # WORKDIR=`pwd`
-          # mkdir build && cd ./build
-          # mkdir lib-tweedledum && cd ./lib-tweedledum
-          # wget https://files.pythonhosted.org/packages/source/t/tweedledum/tweedledum-1.1.1.tar.gz \
-          #   https://github.com/boschmitt/tweedledum/pull/170.patch \
-          #   https://github.com/pybind/pybind11/archive/refs/tags/v2.10.4.tar.gz
-          # tar xvf tweedledum-1.1.1.tar.gz && tar xvf v2.10.4.tar.gz
-          # cd ./tweedledum-1.1.1
-          # patch --forward --strip=1 --input="../170.patch"
-          # cd ./external
-          # rm -r pybind11 && mv ../../pybind11-2.10.4 pybind11
-          # cd ../include/tweedledum/IR
-          # sed -i '6s/.*/#include <cstdint>/' ./Cbit.h
-          # cd ../../..
-          # sed -i 's/project/option/' ./pyproject.toml
-          # python ./setup.py build
-          # pip install .
-          # cd ${WORKDIR} && unset WORKDIR
+          WORKDIR=`pwd`
+          mkdir build && cd ./build
+          mkdir lib-tweedledum && cd ./lib-tweedledum
+          wget https://files.pythonhosted.org/packages/source/t/tweedledum/tweedledum-1.1.1.tar.gz \
+            https://github.com/boschmitt/tweedledum/pull/170.patch \
+            https://github.com/pybind/pybind11/archive/refs/tags/v2.10.4.tar.gz
+          tar xvf tweedledum-1.1.1.tar.gz && tar xvf v2.10.4.tar.gz
+          cd ./tweedledum-1.1.1
+          patch --forward --strip=1 --input="../170.patch"
+          cd ./external
+          rm -r pybind11 && mv ../../pybind11-2.10.4 pybind11
+          cd ../include/tweedledum/IR
+          sed -i '6s/.*/#include <cstdint>/' ./Cbit.h
+          cd ../../..
+          sed -i 's/project/option/' ./pyproject.toml
+          python ./setup.py build
+          pip install .
+          cd ${WORKDIR} && unset WORKDIR
       - name: Run pylint
         run: PYTHONPATH=. pylint ./src
