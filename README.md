@@ -95,10 +95,22 @@ pip list | grep 'tweedledum'
 ## Running the examples
 
 Some examples that use QASP can be found in the `./src/examples` folder of this repository.
+
 In order to run them, first install the [`just` command runner](https://github.com/casey/just):
 
 ```sh
 snap install --edge --classic just
+just -l # Show available commands
 ```
 
-<!-- TODO -->
+To see a list of all the available examples, run:
+
+```sh
+just list
+```
+
+Then, to run one, use the following command:
+
+```sh
+just run <name>
+```
