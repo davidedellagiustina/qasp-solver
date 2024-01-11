@@ -44,7 +44,7 @@ def circuit_optimal(algorithm: QuantumCircuit, oracle: QuantumOracle, m: int) ->
     assert algorithm.num_qubits == oracle.num_qubits
 
     n = algorithm.num_qubits
-    inc = True if m > (2**n)/2 else False
+    inc = m > (2**n)/2
     num_iters = __optimal_num_iters(n, m)
 
     return circuit(algorithm, oracle, num_iters, inc)
@@ -154,8 +154,8 @@ def __measure_to_model(measurements: str, var_names: str) -> Model:
 
     model = []
     for (name, value) in zip(var_names, measurements):
-        assert value == '0' or value == '1'
-        bool_value = True if value == '1' else False
+        assert value in ('0', '1')
+        bool_value = value == '1'
         model += [(name, bool_value)]
     return model
 
