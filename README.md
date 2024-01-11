@@ -2,6 +2,13 @@
 
 <!-- TODO -->
 
+## Table of contents
+
+- [Build instructions](#build-instructions)
+    - [Python virtual environment](#python-virtual-environment)
+    - [Dependencies](#dependencies)
+- [Running the examples](#running-the-examples)
+
 ## Build instructions
 
 ### Python virtual environment
@@ -71,3 +78,14 @@ Optionally, you can check that the installation was successful by listing the in
 ```sh
 pip list | grep 'tweedledum'
 ```
+
+## Running the examples
+
+Some examples that use QASP can be found in the `./src/examples` folder of this repository.
+In order to run them, first install the [`just` command runner](https://github.com/casey/just):
+
+```sh
+snap install --edge --classic just
+```
+
+<!-- TODO -->
