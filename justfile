@@ -1,8 +1,7 @@
 python_path := '.'
 
-# Dummy default recipe, just to avoid running undesired commands if no argument is supplied
 _default:
-    @echo "Run \`just -l' to list the available recipies"
+    @ just -l
 
 # Run format and lint checks corresponding to those run by the GitHub CI action
 ci:
@@ -11,8 +10,12 @@ ci:
 
 # List the available examples
 list:
-    @ls -lA ./src/examples/ | tail -n +2 | awk '{print $9}' | sed 's/\.py//' | sed '/pycache/d'
+    @ ls -lA ./src/examples/ | tail -n +2 | awk '{print $9}' | sed 's/\.py//' | sed '/__/d'
 
 # Run a selected example from the examples folder
 run example:
-    PYTHONPATH={{python_path}} python ./src/examples/{{example}}.py
+    ( \
+        export PYTHONPATH={{python_path}}; \
+        export NAME=`echo {{example}} | sed 's/\.py//'`; \
+        python ./src/examples/$NAME.py \
+    )

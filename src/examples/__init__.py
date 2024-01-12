@@ -1,2 +1,0 @@
-'''QASP examples.
-'''
