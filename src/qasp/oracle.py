@@ -62,21 +62,22 @@ def from_asp_stable_models(stable_models: list[Model], var_order: list[str] = No
     #### Returns
         Oracle: Built oracle.
     '''
-    atoms = [atom for (atom, _) in stable_models[0]
-             ] if var_order is None else var_order
+    atoms = [
+        atom for (atom, _) in stable_models[0]
+    ] if var_order is None else var_order
 
     # Build classical oracle
-    def fun(model):
+    def c_oracle(model):
         return model in stable_models
 
     # Build quantum oracle
     clauses = map(__model_to_formula, stable_models)
     formula = ' | '.join(clauses)
-    oracle = PhaseOracle(formula, var_order=atoms)
+    oracle_gate = PhaseOracle(formula, var_order=atoms)
 
     # Wrap quantum oracle in a circuit with proper qubit labels
     regs = [QuantumRegister(1, f'{atom}') for atom in atoms]
-    circ = QuantumCircuit(*regs, name='Oracle')
-    circ.compose(oracle, circ.qubits, inplace=True)
+    q_oracle = QuantumCircuit(*regs, name='Oracle')
+    q_oracle.compose(oracle_gate, q_oracle.qubits, inplace=True)
 
-    return (fun, circ)
+    return (c_oracle, q_oracle)
