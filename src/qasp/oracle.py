@@ -67,8 +67,8 @@ def from_asp_stable_models(stable_models: list[Model], var_order: list[str] = No
     ] if var_order is None else var_order
 
     # Build classical oracle
-    def c_oracle(model):
-        return model in stable_models
+    def c_oracle(interp):
+        return interp in stable_models
 
     # Build quantum oracle
     clauses = map(__model_to_formula, stable_models)
