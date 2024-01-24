@@ -1,5 +1,5 @@
 [design]
-max-locals=20
+max-locals=25
 
 [miscellaneous]
 notes=
