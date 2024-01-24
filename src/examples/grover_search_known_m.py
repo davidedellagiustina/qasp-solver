@@ -19,20 +19,22 @@ STABLE_MODELS = [
 ]
 
 
-if __name__ == '__main__':
+def main():
+    '''Entrypoint.
+    '''
     print(f'ASP program:\n{tab(PRGM.strip(), striplines=True)}\n')
     pause()
 
     # Program parameters
-    N = len(STABLE_MODELS[0])
-    M = len(STABLE_MODELS)
-    print(f'Number of variables: {N}.')
-    print(f'Number of stable models: {M}.')
+    n = len(STABLE_MODELS[0])
+    m = len(STABLE_MODELS)
+    print(f'Number of variables: {n}.')
+    print(f'Number of stable models: {m}.')
     print()
     pause()
 
     # Initialization algorithm
-    algorithm = qasp.init_algorithm.alg_grover(N)  # Walsh-Hadamard
+    algorithm = qasp.init_algorithm.alg_grover(n)  # Walsh-Hadamard
     print(f'Initialization algorithm:\n{tab(str(algorithm.draw()))}\n')
     pause()
 
@@ -43,9 +45,13 @@ if __name__ == '__main__':
 
     # Simulation
     (circuit, iters, stable_model) = qasp.problems.amplification.exec_find_one_known_m(
-        algorithm, oracle, M)
+        algorithm, oracle, m)
     print(f'Used circuit:\n{tab(str(circuit.draw()))}\n')
     pause()
     print(f'Found stable model: {stable_model}.')
     print(f'Number of iterations: {iters}.')
     print()
+
+
+if __name__ == '__main__':
+    main()
