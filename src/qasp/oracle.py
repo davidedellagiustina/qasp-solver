@@ -11,7 +11,7 @@ from qiskit.circuit.library import PhaseOracle
 # +-------+
 
 Literal = tuple[str, bool]  # Either atom or negated atom
-Model = list[Literal]  # Complete (!) list of literals
+Model = set[Literal]  # Complete (!) set of literals
 ClassicalOracle = Callable[[Model], bool]
 QuantumOracle = QuantumCircuit
 Oracle = tuple[ClassicalOracle, QuantumOracle]

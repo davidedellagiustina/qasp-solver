@@ -1,6 +1,7 @@
 '''Find the models of an ASP program using the Grover search algorithm, but without knowing the \
     number M of solutions.
 '''
+# TODO: Better docstring with reference to the corresponding example in the thesis.
 
 from src import qasp
 from src.examples.util import tab, pause
@@ -15,8 +16,8 @@ PRGM = '''
 
 # Hardcoded list of stable models
 STABLE_MODELS = [
-    [('p', True), ('q', False), ('r', True)],  # {p, r}
-    [('p', False), ('q', True), ('r', True)],  # {q, r}
+    {('p', True), ('q', False), ('r', True)},  # {p, r}
+    {('p', False), ('q', True), ('r', True)},  # {q, r}
 ]
 
 
