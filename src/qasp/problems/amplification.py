@@ -6,7 +6,7 @@ import math
 import random
 from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
 from qiskit.circuit.library import GroverOperator
-from ..oracle import Model, QuantumOracle, Oracle
+from ..oracle import Interpretation, QuantumOracle, Oracle
 from ..simul import __exec_circuit
 
 
@@ -153,7 +153,7 @@ def circuit(
 # | Algorithm simulation |
 # +----------------------+
 
-def __measure_to_model(measurements: str, var_names: list[str]) -> Model:
+def __measure_to_model(measurements: str, var_names: list[str]) -> Interpretation:
     '''Convert the result of a measurement to a human-readable format with variable names.
 
     #### Arguments
@@ -161,7 +161,7 @@ def __measure_to_model(measurements: str, var_names: list[str]) -> Model:
         var_names (list[str]): Ordered list of variable names that the measurements refer to.
 
     #### Return
-        Model: Solution representation.
+        Interpretation: Solution representation.
     '''
     assert len(measurements) == len(var_names)
 
@@ -178,7 +178,7 @@ def exec_find_one_known_m(
     oracle: Oracle,
     m: int,
     aux_qubits: list[int] = None
-) -> tuple[QuantumCircuit, int, Model]:
+) -> tuple[QuantumCircuit, int, Interpretation]:
     '''Simulate the amplitude amplification circuit to find one solution to the problem.
 
     #### Arguments
@@ -189,8 +189,8 @@ def exec_find_one_known_m(
             that should not be used for the search procedure. Defaults to the empty list.
 
     #### Return
-        tuple[QuantumCircuit, int, Model]: Used circuit, number of iterations performed, and found \
-            solution.
+        tuple[QuantumCircuit, int, Interpretation]: Used circuit, number of iterations performed, \
+            and found solution.
     '''
     aux_qubits = [] if aux_qubits is None else aux_qubits
     (c_oracle, q_oracle) = oracle
@@ -225,7 +225,7 @@ def exec_find_one_unknown_m(
     oracle: Oracle,
     aux_qubits: list[int] = None,
     c: float = 1.5
-) -> tuple[list[QuantumCircuit], int, Model]:
+) -> tuple[list[QuantumCircuit], int, Interpretation]:
     '''Exponentially guess the value of m to find one solution to the problem.
 
     #### Arguments
@@ -236,8 +236,8 @@ def exec_find_one_unknown_m(
         c (float): Base of the exponential defining the guess for m.
 
     #### Return
-        tuple[list[QuantumCircuit], int, Model]: List of used circuits, number of iterations \
-            performed, and found solution.
+        tuple[list[QuantumCircuit], int, Interpretation]: List of used circuits, number of \
+            iterations performed, and found solution.
     '''
     aux_qubits = [] if aux_qubits is None else aux_qubits
     (c_oracle, q_oracle) = oracle

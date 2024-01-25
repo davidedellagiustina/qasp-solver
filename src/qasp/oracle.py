@@ -11,8 +11,8 @@ from qiskit.circuit.library import PhaseOracle
 # +-------+
 
 Literal = tuple[str, bool]  # Either atom or negated atom
-Model = set[Literal]  # Complete (!) set of literals
-ClassicalOracle = Callable[[Model], bool]
+Interpretation = set[Literal]  # Complete (!) set of literals
+ClassicalOracle = Callable[[Interpretation], bool]
 QuantumOracle = QuantumCircuit
 Oracle = tuple[ClassicalOracle, QuantumOracle]
 
@@ -34,11 +34,11 @@ def __literal_to_formula(literal: Literal) -> str:
     return ('' if value else '~') + f'{atom}'
 
 
-def __model_to_formula(model: Model) -> str:
+def __model_to_formula(model: Interpretation) -> str:
     '''Build a logical formula whose only model is the given one.
 
     #### Arguments
-        model (Model): Input model.
+        model (Interpretation): Input model.
 
     #### Returns
         str: Built logical formula.
@@ -51,11 +51,15 @@ def __model_to_formula(model: Model) -> str:
 # | Oracle construction |
 # +---------------------+
 
-def from_asp_stable_models(stable_models: list[Model], var_order: list[str] = None) -> Oracle:
+def from_asp_stable_models(
+    stable_models: list[Interpretation],
+    var_order: list[str] = None
+) -> Oracle:
     '''Build an oracle solving an ASP program.
 
     #### Arguments
-        stable_models (list[Model]): List of the stable models of the considered ASP program.
+        stable_models (list[Interpretation]): List of the stable models of the considered ASP \
+            program.
         var_order (list[str], optional): Explicit ordering of the variables. Defaults to `None` \
             (i.e. appearence order).
 
