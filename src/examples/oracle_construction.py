@@ -21,7 +21,8 @@ def build_oracle() -> tuple[qasp.oracle.Oracle, list[int]]:
     '''Build the quantum oracle shown in Example 4.1.1 in the thesis.
 
     #### Return
-        QuantumCircuit: Circuit implementing the oracle.
+        tuple[QuantumCircuit, list[int]]: Circuit implementing the oracle and list of auxiliary \
+            qubits used.
     '''
     # Build classical oracle
     def c_oracle(interp):
@@ -38,9 +39,10 @@ def build_oracle() -> tuple[qasp.oracle.Oracle, list[int]]:
     q_in_reduct = QuantumRegister(1, 'q_in_reduct')
     p_equal = QuantumRegister(1, 'p_equal')
     q_equal = QuantumRegister(1, 'q_equal')
+    equal = QuantumRegister(1, 'equal')
     q_oracle = QuantumCircuit(p, q, p_if_not_q, p_in_reduct,
-                              q_in_reduct, p_equal, q_equal, name='Oracle')
-    aux_qubits = list(range(2, 7))
+                              q_in_reduct, p_equal, q_equal, equal, name='Oracle')
+    aux_qubits = list(range(2, 8))
 
     # Step 1
     q_oracle.x(p_if_not_q)
@@ -62,8 +64,11 @@ def build_oracle() -> tuple[qasp.oracle.Oracle, list[int]]:
     undo = copy.deepcopy(q_oracle).reverse_ops()
 
     # Step 4
-    q_oracle.ccz(p_equal, q_equal, p)
-    q_oracle.ccz(p_equal, q_equal, q)
+    q_oracle.x(equal)
+    q_oracle.h(equal)
+    q_oracle.ccx(p_equal, q_equal, equal)
+    q_oracle.h(equal)
+    q_oracle.x(equal)
     q_oracle.barrier()
 
     # Undo steps
@@ -80,7 +85,7 @@ def main():
 
     # Program parameters
     n = 2
-    n_aux = 5  # Number of auxiliary qubits
+    n_aux = 6  # Number of auxiliary qubits
     m = 1
     print(f'Number of variables: {n}.')
     print(f'Number of stable models: {m}.')
