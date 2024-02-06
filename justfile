@@ -14,7 +14,7 @@ list:
 
 # Run a selected example from the examples folder
 run example:
-    ( \
+    @ ( \
         export PYTHONPATH={{python_path}}; \
         export NAME=`echo {{example}} | sed 's/\.py//'`; \
         python ./src/examples/$NAME.py \

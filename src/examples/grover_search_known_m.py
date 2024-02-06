@@ -1,6 +1,9 @@
 '''Find the models of an ASP program using the naive Grover search algorithm.
+
+Exapmple 4.1.1 in the thesis document shows how to use the Grover Search algorithm \
+to find the stable models of an ASP program. This example provides an implementation \
+of that technique, to show how it can be used in practice.
 '''
-# TODO: Better docstring with reference to the corresponding example in the thesis.
 
 from src import qasp
 from src.examples.util import tab, pause
