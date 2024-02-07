@@ -6,7 +6,7 @@ import math
 from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
 from qiskit.circuit.library import GroverOperator, QFT
 from ..oracle import Oracle, QuantumOracle
-from ..simul import __exec_circuit
+from ..simul import exec_circuit
 
 
 # +--------------------+
@@ -162,7 +162,7 @@ def exec_count(
     circ = circuit(algorithm, q_oracle, m, eps, aux_qubits)
 
     # Run simulation
-    result = __exec_circuit(circ, shots=10000)
+    result = exec_circuit(circ, shots=10000)
     measurements = list(result.get_counts(circ).keys())[0]
     print(result.get_counts())
 

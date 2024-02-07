@@ -7,7 +7,7 @@ from qiskit.transpiler.passes.synthesis import SolovayKitaev
 from qiskit_aer import Aer, AerJob
 
 
-def __exec_circuit(circ: QuantumCircuit, shots: int = 1) -> AerJob:
+def exec_circuit(circ: QuantumCircuit, shots: int = 1) -> AerJob:
     '''Execute a quantum circuit and retrieve the execution result.
 
     #### Arguments

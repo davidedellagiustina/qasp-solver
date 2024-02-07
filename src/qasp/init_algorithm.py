@@ -21,7 +21,7 @@ def alg_grover(n: int) -> QuantumCircuit:
 
 
 def alg_from_weights(weights: list[float]) -> QuantumCircuit:
-    '''Return an instance of the Rot initialization algorithm defined by Riguzzi.
+    '''Return an instance of the Rot initialization algorithm defined by Riguzzi and Mykhailova.
 
     #### Arguments
         weights(list[float]): Weight of each bit evaluating to 1. Complementary is computed \

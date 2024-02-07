@@ -7,7 +7,7 @@ import random
 from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
 from qiskit.circuit.library import GroverOperator
 from ..oracle import Interpretation, QuantumOracle, Oracle
-from ..simul import __exec_circuit
+from ..simul import exec_circuit
 
 
 # +-----------------------+
@@ -210,7 +210,7 @@ def exec_find_one_known_m(
     model, iters = None, 0
     while True:
         iters += 1
-        result = __exec_circuit(circ, shots=1)
+        result = exec_circuit(circ, shots=1)
         measurements = list(result.get_counts(circ).keys())[0]
         model = __measure_to_model(measurements, var_names)
         if c_oracle(model):
@@ -264,7 +264,7 @@ def exec_find_one_unknown_m(
         m = math.ceil(c**iters)
 
         # Step 3
-        result = __exec_circuit(circ_noiter, shots=1)
+        result = exec_circuit(circ_noiter, shots=1)
         measurements = list(result.get_counts(circ_noiter).keys())[0]
         model = __measure_to_model(measurements, var_names)
         if c_oracle(model):
@@ -275,7 +275,7 @@ def exec_find_one_unknown_m(
         circ = circuit(copy.deepcopy(algorithm),
                        copy.deepcopy(q_oracle), j, inc, aux_qubits)
         circs.append(circ)
-        result = __exec_circuit(circ, shots=1)
+        result = exec_circuit(circ, shots=1)
         measurements = list(result.get_counts(circ).keys())[0]
         model = __measure_to_model(measurements, var_names)
         if c_oracle(model):
