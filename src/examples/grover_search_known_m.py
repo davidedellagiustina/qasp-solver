@@ -44,7 +44,8 @@ def main():
     pause()
 
     # Oracle
-    oracle = qasp.oracle.from_asp_stable_models(STABLE_MODELS)
+    oracle = qasp.oracle.from_asp_stable_models(
+        STABLE_MODELS, var_order=['p', 'q', 'r'])
     print(f'Quantum oracle:\n{tab(str(oracle[1].draw()))}\n')
     pause()
 
