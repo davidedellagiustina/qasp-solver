@@ -31,9 +31,10 @@ def main():
 
     # Program parameters
     n = len(STABLE_MODELS[0])
-    m = len(STABLE_MODELS)
+    # pylint: disable=invalid-name
+    M = len(STABLE_MODELS)
     print(f'Number of variables: {n}.')
-    print(f'Number of stable models: {m}.')
+    print(f'Number of stable models: {M}.')
     print()
     pause()
 
@@ -49,7 +50,7 @@ def main():
 
     # Simulation
     (circuit, iters, stable_model) = qasp.problems.amplification.exec_find_one_known_m(
-        algorithm, oracle, m)
+        algorithm, oracle, M)
     print(f'Used circuit:\n{tab(str(circuit.draw()))}\n')
     pause()
     print(f'Found stable model: {stable_model}.')

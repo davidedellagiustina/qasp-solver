@@ -18,7 +18,7 @@ PRGM = '''
 
 
 def build_oracle() -> tuple[qasp.oracle.Oracle, list[int]]:
-    '''Build the quantum oracle shown in Example 4.1.1 in the thesis.
+    '''Build the quantum oracle shown in Example 4.2.1 in the thesis.
 
     #### Return
         tuple[QuantumCircuit, list[int]]: Circuit implementing the oracle and list of auxiliary \
@@ -84,18 +84,19 @@ def main():
     pause()
 
     # Program parameters
-    n = 2
+    n_search = 2  # Number of search qubits
     n_aux = 6  # Number of auxiliary qubits
-    m = 1
-    print(f'Number of variables: {n}.')
-    print(f'Number of stable models: {m}.')
+    # pylint: disable=invalid-name
+    M = 1
+    print(f'Number of variables: {n_search}.')
+    print(f'Number of stable models: {M}.')
     print()
     pause()
 
     # Initialization algorithm
-    algorithm = qasp.init_algorithm.alg_grover(n)  # Walsh-Hadamard
-    aux_reg = QuantumRegister(n_aux, 'aux')
-    algorithm.add_register(aux_reg)
+    algorithm = qasp.init_algorithm.alg_grover(n_search)  # Walsh-Hadamard
+    reg_aux = QuantumRegister(n_aux, 'aux')
+    algorithm.add_register(reg_aux)
     algorithm.name += ' x Id'
     print(f'Initialization algorithm:\n{tab(str(algorithm.draw()))}\n')
     pause()
@@ -107,7 +108,7 @@ def main():
 
     # Simulation
     (circuit, iters, stable_model) = qasp.problems.amplification.exec_find_one_known_m(
-        algorithm, oracle, m, aux_qubits)
+        algorithm, oracle, M, aux_qubits)
     print(f'Used circuit:\n{tab(str(circuit.draw()))}\n')
     pause()
     print(f'Found stable model: {stable_model}.')

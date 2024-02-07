@@ -192,6 +192,8 @@ def exec_find_one_known_m(
         tuple[QuantumCircuit, int, Interpretation]: Used circuit, number of iterations performed, \
             and found solution.
     '''
+    # pylint: disable=too-many-locals
+
     aux_qubits = [] if aux_qubits is None else aux_qubits
     (c_oracle, q_oracle) = oracle
 
@@ -239,6 +241,8 @@ def exec_find_one_unknown_m(
         tuple[list[QuantumCircuit], int, Interpretation]: List of used circuits, number of \
             iterations performed, and found solution.
     '''
+    # pylint: disable=too-many-locals
+
     aux_qubits = [] if aux_qubits is None else aux_qubits
     (c_oracle, q_oracle) = oracle
     inc = True  # Since we do not know m, we must be the most general possible

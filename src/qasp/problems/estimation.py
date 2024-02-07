@@ -33,6 +33,8 @@ def circuit(
     #### Return
         QuantumCircuit: Built circuit.
     '''
+    # pylint: disable=too-many-locals
+
     aux_qubits = [] if aux_qubits is None else aux_qubits
 
     assert m > 0 and eps > 0
