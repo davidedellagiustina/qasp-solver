@@ -1,9 +1,12 @@
-'''Count the number of stable models of an ASP program using the naive Quantum Counting algorithm.
+'''Count the number of stable models of an ASP program after some navigation steps, using the QWMC \
+circuit.
 
-Since example `quantum_counting' uses only 2 qubits, the precision of the resulting estimate of M \
-is very low. This example improves the estimate precision by adding a few qubits to the circuit.
+This example implements Example 5.1.1 in the thesis document, where we use the Quanutm WMC circuit \
+to estimate the number of solutions to a program after navigating its solution space using a route \
+delta.
 '''
 
+import math
 from src import qasp
 from src.examples.util import tab, pause
 
@@ -21,6 +24,25 @@ STABLE_MODELS = [
     {('p', False), ('q', True), ('r', True)},  # {q, r}
 ]
 
+# Hardcoded navigation route and relative weight function
+DELTA = [('p', True)]
+WEIGHTS = [1, 1/2, 1/2]  # Order: p < q < r
+
+
+def count_fn(phase: float) -> float:
+    '''Estimate the number of solutions to PRGM from the value of the estimated phase.
+
+    #### Arguments
+        phase (float): Estimated phase.
+
+    #### Return
+        float: Estimated number of solutions.
+    '''
+    n = len(STABLE_MODELS[0])
+    k = len(DELTA)
+    coeff = 2**(n-k)
+    return coeff * 2 * math.sin(phase/2)**2
+
 
 def main():
     '''Entrypoint.
@@ -34,8 +56,16 @@ def main():
     print()
     pause()
 
+    # Route
+    route = ', '.join(
+        [('' if value else 'not ') + f'{atom}' for (atom, value) in DELTA]
+    )
+    print(f'Route delta: <{route}>')
+    print()
+    pause()
+
     # Initialization algorithm
-    algorithm = qasp.init_algorithm.alg_grover(n)  # Walsh-Hadamard
+    algorithm = qasp.init_algorithm.alg_from_weights(WEIGHTS)  # Rot gate
     print(f'Initialization algorithm:\n{tab(str(algorithm.draw()))}\n')
     pause()
 
@@ -49,7 +79,8 @@ def main():
     m = 5  # NOTE: This is the only change from `quantum_counting' example
     eps = 1/6
     # pylint: disable=invalid-name
-    (circuit, _, M) = qasp.problems.estimation.exec_count(algorithm, oracle, m, eps)
+    (circuit, _, M) = qasp.problems.estimation.exec_count(
+        algorithm, oracle, m, eps, count_fn=count_fn)
     print(f'Used circuit:\n{tab(str(circuit.draw()))}\n')
     pause()
     print(

@@ -18,8 +18,8 @@ PRGM = '''
 
 # Hardcoded list of stable models
 STABLE_MODELS = [
-    [('p', True), ('q', False), ('r', True)],  # {p, r}
-    [('p', False), ('q', True), ('r', True)],  # {q, r}
+    {('p', True), ('q', False), ('r', True)},  # {p, r}
+    {('p', False), ('q', True), ('r', True)},  # {q, r}
 ]
 
 
