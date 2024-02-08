@@ -3,6 +3,8 @@
 
 import copy
 import math
+import intervals as interval
+from intervals import Interval
 from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
 from qiskit.circuit.library import GroverOperator, QFT
 from ..oracle import Oracle, QuantumOracle
@@ -88,22 +90,22 @@ def circuit(
         oracle, state_preparation=algorithm, reflection_qubits=qubits_search)
     pow_g.name = 'Q^(2^0)'
     for idx in range(t):
-        ctrl = t - idx - 1
         c_pow_g = copy.deepcopy(pow_g).control()
-        circ.compose(c_pow_g, [ctrl] +
-                     list(range(t, t+n)), inplace=True)
+        circ.compose(c_pow_g, [t-idx-1] + list(range(t, t+n)), inplace=True)
         # Next power of G
         pow_g.compose(pow_g, pow_g.qubits, inplace=True)
         pow_g.name = f'Q^(2^{idx+1})'
 
     # Inverse QFT
-    iqft = QFT(t, inverse=True)
+    # NOTE: Qiskit's QFT has the opposite bit order w.r.t. the one used in the thesis, hence why \
+    #       we disable the swaps.
+    iqft = QFT(t, inverse=True, do_swaps=False)
     circ.append(iqft, qr0)
 
     # Measurements
     result = ClassicalRegister(m, name='result')
     circ.add_register(result)
-    circ.measure(list(range(t-m, t)), result)  # Only m bits
+    circ.measure(list(range(t-m, t)), result)  # Only requested m bits
 
     return circ
 
@@ -112,25 +114,41 @@ def circuit(
 # | Algoroithm simulation |
 # +-----------------------+
 
-def __measure_to_count(measurements: str, num_search_qubits: int) -> tuple[float, int]:
-    '''Convert the result of a measurement to to actual phase factor and the resulting solutions \
-        count.
+def __measure_to_count(
+    measurements: str,
+    num_search_qubits: int
+) -> tuple[Interval, Interval]:
+    '''Convert the result of a measurement to estimation intervals for the respective phase and \
+        for the solutions count.
 
     #### Arguments
         measurements (str): Measured bits.
         num_search_qubits (int): Number of search qubits.
 
     #### Return
-        tuple[float, int]: Phase factor and solutions count.
+        tuple[Interval, Interval]: Estimation intervals for the measured phase and the solutions \
+            count, respectively.
     '''
-    phi = 0.0
-    for (idx, bit) in zip(range(len(measurements)), measurements):
-        phi += int(bit) * 2**(-idx-1)
-    print(measurements, phi)
-    phase = 2 * math.pi * phi
-    count = 2**num_search_qubits * (math.sin(phase / 2))**2
+    m = len(measurements)
+    # pylint: disable=invalid-name
+    N = 2**num_search_qubits
 
-    return (phase, count)
+    phi = 0.0
+    for (idx, bit) in zip(range(m), measurements):
+        phi += int(bit) * 2**(-idx-1)
+    phases = [2 * math.pi * (phi + delta) for delta in [0, 2**(-m)]]
+
+    if phi <= 1/2:  # If theta was measured
+        interval_type = interval.closedopen
+    else:  # If (2 pi - theta) was measured
+        interval_type = interval.openclosed
+        phases = [2 * math.pi - phase for phase in reversed(phases)]
+
+    phase_estimate = interval_type(phases[0], phases[1])
+    counts = [N * (math.sin(phase/2))**2 for phase in phases]  # FIXME
+    count_estimate = interval_type(counts[0], counts[1])
+
+    return (phase_estimate, count_estimate)
 
 
 def exec_count(
@@ -139,7 +157,7 @@ def exec_count(
     m: int,
     eps: float,
     aux_qubits: list[int] = None
-) -> tuple[QuantumCircuit, float, int]:
+) -> tuple[QuantumCircuit, Interval, Interval]:
     '''Simulate the amplitude estimation circuit to approximate the number of solutions of the \
         problem.
 
@@ -152,8 +170,8 @@ def exec_count(
             that should not be used for the search procedure. Defaults to the empty list.
 
     #### Return
-        tuple[QuantumCircuit, float, int]: Used circuit, measured phase, and estimated number \
-            of solutions.
+        tuple[QuantumCircuit, Interval, Interval]: Used circuit, estimation interval for the \
+            measured phase, and estimation interval for the solutions count.
     '''
     aux_qubits = [] if aux_qubits is None else aux_qubits
     (_, q_oracle) = oracle  # Classical oracle is unused
@@ -163,12 +181,9 @@ def exec_count(
     # Build circuit
     circ = circuit(algorithm, q_oracle, m, eps, aux_qubits)
 
-    # Run simulation
-    result = exec_circuit(circ, shots=10000)
-    measurements = list(result.get_counts(circ).keys())[0]
-    print(result.get_counts())
-
-    # Compute results
+    # Run simulation and compute results
+    result = exec_circuit(circ, shots=1)
+    measurements = list(result.get_counts().keys())[0]
     (phase, count) = __measure_to_count(measurements, n)
 
     return (circ, phase, count)
