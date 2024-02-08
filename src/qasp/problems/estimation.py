@@ -3,6 +3,7 @@
 
 import copy
 import math
+from typing import Callable
 import intervals as interval
 from intervals import Interval
 from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
@@ -114,9 +115,24 @@ def circuit(
 # | Algoroithm simulation |
 # +-----------------------+
 
+def __phase_to_count(n: int, phase: float) -> float:
+    '''Compute the number M of solutions of a search problem given an estimate of the rotation \
+        angle phi of the respective Grover Operator.
+
+    #### Arguments
+        N (int): Number of search qubits.
+        phase (float): Estimate value of the phase phi.
+
+    #### Return
+        float: Estimated value of M.
+    '''
+    return 2**n * math.sin(phase/2)**2
+
+
 def __measure_to_count(
     measurements: str,
-    num_search_qubits: int
+    num_search_qubits: int,
+    count_fn: Callable[[float], float] = None
 ) -> tuple[Interval, Interval]:
     '''Convert the result of a measurement to estimation intervals for the respective phase and \
         for the solutions count.
@@ -124,15 +140,18 @@ def __measure_to_count(
     #### Arguments
         measurements (str): Measured bits.
         num_search_qubits (int): Number of search qubits.
+        count_fn (Callable[[float], float]): Function that, given an estimate for phi, computes \
+            the solutions count (or any other needed value). Defaults to N * sin^2(theta/2).
 
     #### Return
         tuple[Interval, Interval]: Estimation intervals for the measured phase and the solutions \
             count, respectively.
     '''
-    m = len(measurements)
-    # pylint: disable=invalid-name
-    N = 2**num_search_qubits
+    count_fn = (
+        lambda phase: __phase_to_count(num_search_qubits, phase)
+    ) if count_fn is None else count_fn
 
+    m = len(measurements)
     phi = 0.0
     for (idx, bit) in zip(range(m), measurements):
         phi += int(bit) * 2**(-idx-1)
@@ -145,7 +164,7 @@ def __measure_to_count(
         phases = [2 * math.pi - phase for phase in reversed(phases)]
 
     phase_estimate = interval_type(phases[0], phases[1])
-    counts = [N * (math.sin(phase/2))**2 for phase in phases]  # FIXME
+    counts = [count_fn(phase) for phase in phases]
     count_estimate = interval_type(counts[0], counts[1])
 
     return (phase_estimate, count_estimate)
@@ -156,7 +175,8 @@ def exec_count(
     oracle: Oracle,
     m: int,
     eps: float,
-    aux_qubits: list[int] = None
+    aux_qubits: list[int] = None,
+    count_fn: Callable[[float], float] = None
 ) -> tuple[QuantumCircuit, Interval, Interval]:
     '''Simulate the amplitude estimation circuit to approximate the number of solutions of the \
         problem.
@@ -168,6 +188,8 @@ def exec_count(
         eps (float): Complement of the desired success probability.
         aux_qubits (list[int]): List of indices of auxiliary qubits (e.g. used by the oracle) \
             that should not be used for the search procedure. Defaults to the empty list.
+        count_fn (Callable[[float], float]): Function that, given an estimate for phi, computes \
+            the solutions count (or any other needed value). Defaults to N * sin^2(theta/2).
 
     #### Return
         tuple[QuantumCircuit, Interval, Interval]: Used circuit, estimation interval for the \
@@ -184,6 +206,6 @@ def exec_count(
     # Run simulation and compute results
     result = exec_circuit(circ, shots=1)
     measurements = list(result.get_counts().keys())[0]
-    (phase, count) = __measure_to_count(measurements, n)
+    (phase, count) = __measure_to_count(measurements, n, count_fn)
 
     return (circ, phase, count)
