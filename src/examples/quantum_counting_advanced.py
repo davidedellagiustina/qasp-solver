@@ -4,7 +4,6 @@ Since example `quantum_counting' uses only 2 qubits, the precision of the result
 is very low. This example improves the estimate precision by adding a few qubits to the circuit.
 '''
 
-import math
 from src import qasp
 from src.examples.util import tab, pause
 
