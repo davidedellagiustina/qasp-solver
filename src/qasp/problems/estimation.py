@@ -195,6 +195,8 @@ def exec_count(
         tuple[QuantumCircuit, Interval, Interval]: Used circuit, estimation interval for the \
             measured phase, and estimation interval for the solutions count.
     '''
+    # pylint: disable=too-many-arguments
+
     aux_qubits = [] if aux_qubits is None else aux_qubits
     (_, q_oracle) = oracle  # Classical oracle is unused
 
