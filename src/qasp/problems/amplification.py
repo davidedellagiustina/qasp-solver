@@ -213,7 +213,7 @@ def exec_find_one_known_m(
     while True:
         iters += 1
         result = exec_circuit(circ, shots=1)
-        measurements = list(result.get_counts(circ).keys())[0]
+        measurements = list(result.get_counts().keys())[0]
         model = __measure_to_model(measurements, var_names)
         if c_oracle(model):
             break
@@ -269,7 +269,7 @@ def exec_find_one_unknown_m(
 
         # Step 3
         result = exec_circuit(circ_noiter, shots=1)
-        measurements = list(result.get_counts(circ_noiter).keys())[0]
+        measurements = list(result.get_counts().keys())[0]
         model = __measure_to_model(measurements, var_names)
         if c_oracle(model):
             break
@@ -280,7 +280,7 @@ def exec_find_one_unknown_m(
                        copy.deepcopy(q_oracle), j, inc, aux_qubits)
         circs.append(circ)
         result = exec_circuit(circ, shots=1)
-        measurements = list(result.get_counts(circ).keys())[0]
+        measurements = list(result.get_counts().keys())[0]
         model = __measure_to_model(measurements, var_names)
         if c_oracle(model):
             break
