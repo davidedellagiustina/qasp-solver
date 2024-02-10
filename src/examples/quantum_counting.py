@@ -46,14 +46,16 @@ def main():
     pause()
 
     # Simulation
-    m = math.ceil(n/2)
+    m = math.ceil(n/2) + 1
     eps = 1/6
     # pylint: disable=invalid-name
     (circuit, _, M) = qasp.problems.estimation.exec_count(algorithm, oracle, m, eps)
     print(f'Used circuit:\n{tab(str(circuit.draw()))}\n')
     pause()
     print(
-        f'Estimated number of solutions: {M.lower:.2f} <= M <= {M.upper:.2f}.')
+        f'Estimated number of solutions: {M.lower:.2f} <{"" if M.left else "="} M',
+        f'<{"" if M.right else "="} {M.upper:.2f}.'
+    )
     print()
 
 
