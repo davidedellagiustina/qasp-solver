@@ -1,7 +1,6 @@
-'''Count the number of stable models of an ASP program using the naive Quantum Counting algorithm.
+'''Count the number of stable models of an ASP program using naive Quantum Counting.
 
-Since example `quantum_counting' uses only 2 qubits, the precision of the resulting estimate of M \
-is very low. This example improves the estimate precision by adding a few qubits to the circuit.
+Improved estimation prevision with respect to `quantum_counting'.
 '''
 
 from src import qasp

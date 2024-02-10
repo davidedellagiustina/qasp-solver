@@ -1,7 +1,8 @@
-'''Find the models of an ASP program using the Grover search algorithm, but without knowing the \
-    number M of solutions.
+'''Find the stable models of an ASP program using QSearch on the naive Grover Search algorithm, \
+without requiring the number M of solutions to be known in advance.
+
+Reference: Example 5.2.1 in the thesis.
 '''
-# TODO: Better docstring with reference to the corresponding example in the thesis.
 
 from src import qasp
 from src.examples.util import tab, pause

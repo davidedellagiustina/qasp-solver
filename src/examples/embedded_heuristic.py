@@ -1,6 +1,7 @@
-'''TODO
+'''Find the stable models of an ASP program during faceted navigation using the Rot gate from QWMC.
+
+Reference: Example 5.2.2 in the thesis.
 '''
-# TODO: Docstring.
 
 from src import qasp
 from src.examples.util import tab, pause

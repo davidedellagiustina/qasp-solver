@@ -1,7 +1,6 @@
-'''Count the number of stable models of an ASP program using the naive Quantum Counting algorithm.
+'''Count the number of stable models of an ASP program using naive Quantum Counting.
 
-Example 4.1.2 in the thesis shows how to use the Quantum Counting algorithm to count the stable \
-models of a given ASP program. This example implements that technique.
+Reference: Example 4.1.2 in the thesis.
 '''
 
 import math

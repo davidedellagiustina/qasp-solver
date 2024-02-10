@@ -1,9 +1,6 @@
-'''Count the number of stable models of an ASP program after some navigation steps, using the QWMC \
-circuit.
+'''Count the number of stable models of an ASP program during faceted navigation using QWMC.
 
-This example implements Example 5.1.1 in the thesis document, where we use the Quanutm WMC circuit \
-to estimate the number of solutions to a program after navigating its solution space using a route \
-delta.
+Reference: Example 5.1.1 in the thesis.
 '''
 
 import math

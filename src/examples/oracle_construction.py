@@ -1,8 +1,6 @@
 '''Grover Search with a quantum oracle built from the classical procedure.
 
-Example 4.2.1 in the thesis shows how to build a quantum oracle for a trivial ASP program using the
-classical procedure. This example applies the Grover Search algorithm in order to demonstrate the
-correctness of the built operator.
+Reference: Example 4.2.1 in the thesis.
 '''
 
 import copy
