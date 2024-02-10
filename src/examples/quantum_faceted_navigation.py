@@ -81,8 +81,12 @@ def main():
     print(f'Used circuit:\n{tab(str(circuit.draw()))}\n')
     pause()
     print(
-        f'Estimated number of solutions: {M.lower:.2f} <{"" if M.left else "="} M',
-        f'<{"" if M.right else "="} {M.upper:.2f}.'
+        'Estimated number of solutions:',
+        f'{M.lower:.2f}',
+        f'<{"" if M.left else "="}',
+        'M',
+        f'<{"" if M.right else "="}',
+        f'{M.upper:.2f}.'
     )
     print()
 
